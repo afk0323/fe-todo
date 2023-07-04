@@ -1,5 +1,11 @@
-const { addTodo, deleteTodo, updateTodo, showTodo } = require("./module");
-const { ERROR } = require("./constant");
+const {
+  showInfo,
+  addTodo,
+  deleteTodo,
+  updateTodo,
+  showTodo,
+} = require("./module");
+const { ERROR, MESSAGE } = require("./constant");
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
@@ -10,22 +16,38 @@ const rl = readline.createInterface({
  * 명령을 입력받는 함수
  */
 function getInput() {
-  rl.setPrompt("명령하세요 : ");
+  rl.setPrompt(MESSAGE.COMMAND);
   rl.prompt();
 
   rl.on("line", (answer) => {
-    if (answer === "exit") rl.close();
-    else {
-      let input = answer.toLowerCase().split("$");
+    // 대문자, 소문자 예외처리
+    answer = answer.toLowerCase();
+    const [command, first, second] = answer.split("$");
 
-      if (input[0] === "show") showTodo(input);
-      else if (input[0] === "add") addTodo(input);
-      else if (input[0] === "delete") deleteTodo(input);
-      else if (input[0] === "update") updateTodo(input);
-      else console.log(ERROR.WRONG_COMMAND);
-
-      rl.prompt();
+    switch (command) {
+      case "exit":
+        rl.close();
+        break;
+      case "info":
+        showInfo();
+        break;
+      case "show":
+        showTodo(first);
+        break;
+      case "add":
+        addTodo(first, second);
+        break;
+      case "delete":
+        deleteTodo(first);
+        break;
+      case "update":
+        updateTodo(first, second);
+        break;
+      default:
+        console.log(ERROR.WRONG_COMMAND);
+        break;
     }
+    rl.prompt();
   });
 }
 
