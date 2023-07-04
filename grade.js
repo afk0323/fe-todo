@@ -43,3 +43,19 @@ const nowState = () => {
     `현재상태 : todo: ${todoCount}개, doing: ${doingCount}개, done: ${doneCount}개`
   );
 };
+
+const showTodo = (input) => {
+  if (input[1] === "all") {
+    nowState();
+  }
+  if (input[1] === "todo" || input[1] === "doing" || input[1] === "done") {
+    let filterItems = todos.filter((todo) => todo.status === input[1]);
+    let listItems = "";
+
+    filterItems.forEach((item, idx) => {
+      if (idx !== 0) listItems += ", ";
+      listItems += `'${item.name}, ${item.id}번'`;
+    });
+    console.log(`${input[1]}리스트 : 총${filterItems.length}건 : ${listItems}`);
+  }
+};
