@@ -72,3 +72,15 @@ const addTodo = (input) => {
   console.log(`${newItem.name} 1개가 추가됐습니다. (id : ${newItem.id})`);
   nowState();
 };
+
+const deleteTodo = (input) => {
+  let inputId = +input[1];
+  let deleteName = "";
+  todos = todos.filter((todo) => {
+    if (todo.id === inputId) deleteName = todo.name;
+    return todo.id !== inputId;
+  });
+
+  console.log(`${deleteName} todo가 목록에서 삭제됐습니다.`);
+  nowState();
+};
