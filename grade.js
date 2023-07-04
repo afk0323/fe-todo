@@ -28,3 +28,18 @@ function getInput() {
     }
   });
 }
+
+const nowState = () => {
+  let todoCount = 0,
+    doingCount = 0,
+    doneCount = 0;
+  todos.forEach((todo) => {
+    if (todo.status === "todo") todoCount++;
+    if (todo.status === "doing") doingCount++;
+    if (todo.status === "done") doneCount++;
+  });
+
+  console.log(
+    `현재상태 : todo: ${todoCount}개, doing: ${doingCount}개, done: ${doneCount}개`
+  );
+};
