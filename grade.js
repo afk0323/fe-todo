@@ -84,3 +84,16 @@ const deleteTodo = (input) => {
   console.log(`${deleteName} todo가 목록에서 삭제됐습니다.`);
   nowState();
 };
+
+const updateTodo = (input) => {
+  let [inputId, inputState] = [+input[1], input[2]];
+  let updateIndex = todos.findIndex((todo) => todo.id === inputId);
+  let updateName = todos[updateIndex].name;
+
+  todos[updateIndex].status = inputState;
+
+  console.log(`${updateName} ${inputState}으로 상태가 변경됐습니다.`);
+  nowState();
+};
+
+getInput();
