@@ -59,3 +59,16 @@ const showTodo = (input) => {
     console.log(`${input[1]}리스트 : 총${filterItems.length}건 : ${listItems}`);
   }
 };
+
+const addTodo = (input) => {
+  let [inputName, inputTag] = [input[1], input[2]];
+  let newItem = {
+    name: inputName,
+    tags: inputTag,
+    status: "todo",
+    id: idCount++,
+  };
+  todos = [...todos, newItem];
+  console.log(`${newItem.name} 1개가 추가됐습니다. (id : ${newItem.id})`);
+  nowState();
+};
