@@ -47,7 +47,8 @@ function getInput() {
         console.log(ERROR.WRONG_COMMAND);
         break;
     }
-    rl.prompt();
+
+    if (command !== "exit") rl.prompt();
   });
 }
 
