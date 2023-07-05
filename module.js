@@ -1,29 +1,28 @@
 const { ERROR, MESSAGE } = require("./constant");
-let { todos } = require("./todos");
-let idCount = 1;
+let { todos, idCount } = require("./todos");
 
+/**
+ * Todo 설명서
+ */
 function showInfo() {
-  console.log(`
-  
-  ----- TODO 리스트 설명서 -----
-  add : add$제목$[tag1, tag2...] 를 입력해주세요.
-  delete : delete$[삭제할 id] 를 입력해주세요.
-  update : update$[id]$[status] 를 입력해주세요.
-  show : show$all || show$todo || show$doing || show$done 을 입력해주세요.
-  
-  `);
+  console.log(MESSAGE.INFO);
+}
+
+function checkArguments(input) {
+  if (input.includes("")) {
+    console.log(ERROR.WRONG_ARGUMENTS);
+    showInfo();
+    return false;
+  }
+  return true;
 }
 
 /**
  * Todo 리스트 추가
  */
-function addTodo(first, second) {
-  const [inputName, inputTag] = [first, second];
-
+function addTodo(inputName, inputTag) {
   // 1. 이름이나, 태그가 없을 때
-  if (!first || !second) {
-    console.log(ERROR.WRONG_ARGUMENTS);
-    showInfo();
+  if (!checkArguments([inputName, inputTag])) {
     return;
   }
 
@@ -37,7 +36,8 @@ function addTodo(first, second) {
 
   // 3. 태그 형식이 아닐 때
   const isArray = (input) => {
-    const regex = /^\s*\[(\s*'[^']*'\s*,)*\s*'[^']*'\s*\]\s*$/;
+    const regex =
+      /^\s*\[(\s*('[^']*'|"([^"]*)")\s*,)*\s*('[^']*'|"([^"]*)")\s*\]\s*$/;
     return regex.test(input);
   };
 
@@ -56,25 +56,22 @@ function addTodo(first, second) {
 
   todos = [...todos, newItem];
   console.log(MESSAGE.ADD(newItem));
-  nowState();
+  nowStatus();
 }
 
 /**
  * Todo 리스트 삭제
  */
-function deleteTodo(first) {
+function deleteTodo(inputId) {
   // 1. id 인자를 입력하지 않았을 떄
-  if (!first) {
-    console.log(ERROR.WRONG_ARGUMENTS);
-    showInfo();
+  if (!checkArguments([inputId])) {
     return;
   }
 
-  const inputId = Number(first);
   let deleteName = "";
   todos = todos.filter((todo) => {
-    if (todo.id === inputId) deleteName = todo.name;
-    return todo.id !== inputId;
+    if (todo.id === Number(inputId)) deleteName = todo.name;
+    return todo.id !== Number(inputId);
   });
 
   // 2. 해당하는 id가 없을 때
@@ -84,22 +81,19 @@ function deleteTodo(first) {
   }
 
   console.log(MESSAGE.DELETE(deleteName));
-  nowState();
+  nowStatus();
 }
 
 /**
  * Todo 리스트 업데이트
  */
-function updateTodo(first, second) {
+function updateTodo(inputId, inputState) {
   // 1. id나 상태를 입력하지 않았을 때
-  if (!first || !second) {
-    console.log(ERROR.WRONG_ARGUMENTS);
-    showInfo();
+  if (!checkArguments([inputId, inputState])) {
     return;
   }
 
-  const [inputId, inputState] = [Number(first), second];
-  const updateIndex = todos.findIndex((todo) => todo.id === inputId);
+  const updateIndex = todos.findIndex((todo) => todo.id === Number(inputId));
 
   // 2. 해당하는 id가 없을 때
   if (updateIndex === -1) {
@@ -115,7 +109,7 @@ function updateTodo(first, second) {
     return;
   }
 
-  // 4. 동일한 상태를 입력했을 때
+  // 4. 동일한 status를 입력했을 때
   if (todos[updateIndex].status === inputState) {
     console.log(ERROR.UPDATE_SAME_STATUS);
     return;
@@ -124,31 +118,27 @@ function updateTodo(first, second) {
   todos[updateIndex].status = inputState;
 
   console.log(MESSAGE.UPDATE(updateName, inputState));
-  nowState();
+  nowStatus();
 }
 
 /**
  * Todo 리스트 출력
  */
-function showTodo(first) {
+function showTodo(inputStatus) {
   // 1. 상태를 입력하지 않았을 때
-  if (!first) {
-    console.log(ERROR.WRONG_ARGUMENTS);
-    showInfo();
+  if (!checkArguments([inputStatus])) {
     return;
   }
 
-  const inputStatus = first;
-
   switch (inputStatus) {
     case "all":
-      nowState();
+      nowStatus();
       break;
     case "todo" || "doing" || "done":
       const filterItems = todos.filter((todo) => todo.status === inputStatus);
       let listItems = "";
 
-      filterItems.forEach((item, idx) => {
+      filterItems.forEach((_, idx) => {
         if (idx !== 0) listItems += ", ";
         listItems += MESSAGE.SHOW_LIST;
       });
@@ -160,7 +150,7 @@ function showTodo(first) {
 /**
  * 현재 Todo 리스트 출력
  */
-function nowState() {
+function nowStatus() {
   let count = {
     todo: 0,
     doing: 0,

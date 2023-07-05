@@ -10,6 +10,25 @@ const ERROR = {
 
 const MESSAGE = {
   COMMAND: "명령하세요 : ",
+  INFO: `
+  
+  ---------------------- TODO 리스트 설명서 ----------------------
+  
+  > todo 추가하기
+  add$제목$[tag1, tag2...] 를 입력해주세요.
+
+  > todo 삭제하기
+  delete$[삭제할 id] 를 입력해주세요.
+
+  > todo 업데이트하기
+  update$[id]$[status] 를 입력해주세요.
+  
+  > todo 살펴보기
+  show$all || show$todo || show$doing || show$done 을 입력해주세요.
+
+  -----------------------------------------------------------------
+  
+  `,
   ADD: (newItem) => `${newItem.name} 1개가 추가됐습니다. (id : ${newItem.id})`,
   DELETE: (deleteName) => `${deleteName} todo가 목록에서 삭제됐습니다.`,
   UPDATE: (updateName, inputState) =>
