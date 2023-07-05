@@ -8,6 +8,9 @@ function showInfo() {
   console.log(MESSAGE.INFO);
 }
 
+/**
+ * Todo 명령어 예외처리
+ */
 function checkArguments(input) {
   if (input.includes("") || input.includes(undefined)) {
     console.log(ERROR.WRONG_ARGUMENTS);
@@ -57,7 +60,7 @@ function addTodo(inputName, inputTag) {
 
   todos = [...todos, newItem];
   console.log(MESSAGE.ADD(newItem));
-  nowStatus();
+  showStatus();
 }
 
 /**
@@ -82,7 +85,7 @@ function deleteTodo(inputId) {
   }
 
   console.log(MESSAGE.DELETE(deleteName));
-  nowStatus();
+  showStatus();
 }
 
 /**
@@ -119,7 +122,7 @@ function updateTodo(inputId, inputState) {
   todos[updateIndex].status = inputState;
 
   console.log(MESSAGE.UPDATE(updateName, inputState));
-  nowStatus();
+  showStatus();
 }
 
 /**
@@ -137,7 +140,7 @@ function showTodo(inputStatus) {
 
   switch (inputStatus) {
     case "all":
-      nowStatus();
+      showStatus();
       console.log(MESSAGE.SHOW_STATUS("todo"));
       console.log(MESSAGE.SHOW("todo", todoFilterItems, todoItems));
       console.log(MESSAGE.SHOW_STATUS("doing"));
@@ -160,6 +163,9 @@ function showTodo(inputStatus) {
   }
 }
 
+/**
+ * 특정 status Todo 리스트 출력
+ */
 function showStatusList(status) {
   const filterItems = todos.filter((todo) => todo.status === status);
   let listItems = "";
@@ -174,7 +180,7 @@ function showStatusList(status) {
 /**
  * 현재 Todo 리스트 출력
  */
-function nowStatus() {
+function showStatus() {
   let count = {
     todo: 0,
     doing: 0,
