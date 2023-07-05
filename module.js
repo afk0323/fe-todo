@@ -25,7 +25,7 @@ function checkArguments(input) {
  */
 function addTodo(inputName, inputTag) {
   // 1. 이름이나, 태그가 없을 때
-  if (!checkArguments([inputName.trim(), inputTag])) {
+  if (!checkArguments([inputName ? inputName.trim() : inputName, inputTag])) {
     return;
   }
 
