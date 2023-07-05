@@ -9,7 +9,7 @@ function showInfo() {
 }
 
 function checkArguments(input) {
-  if (input.includes("")) {
+  if (input.includes("") || input.includes(undefined)) {
     console.log(ERROR.WRONG_ARGUMENTS);
     showInfo();
     return false;
@@ -22,7 +22,7 @@ function checkArguments(input) {
  */
 function addTodo(inputName, inputTag) {
   // 1. 이름이나, 태그가 없을 때
-  if (!checkArguments([inputName, inputTag])) {
+  if (!checkArguments([inputName.trim(), inputTag])) {
     return;
   }
 
@@ -131,20 +131,44 @@ function showTodo(inputStatus) {
     return;
   }
 
+  const [todoFilterItems, todoItems] = showStatusList("todo");
+  const [doingFilterItems, doingItems] = showStatusList("doing");
+  const [doneFilterItems, doneItems] = showStatusList("done");
+
   switch (inputStatus) {
     case "all":
       nowStatus();
+      console.log(MESSAGE.SHOW_STATUS("todo"));
+      console.log(MESSAGE.SHOW("todo", todoFilterItems, todoItems));
+      console.log(MESSAGE.SHOW_STATUS("doing"));
+      console.log(MESSAGE.SHOW("doing", doingFilterItems, doingItems));
+      console.log(MESSAGE.SHOW_STATUS("done"));
+      console.log(MESSAGE.SHOW("done", doneFilterItems, doneItems));
       break;
-    case "todo" || "doing" || "done":
-      const filterItems = todos.filter((todo) => todo.status === inputStatus);
-      let listItems = "";
-
-      filterItems.forEach((item, idx) => {
-        listItems += MESSAGE.SHOW_LIST(item, idx);
-      });
-      console.log(MESSAGE.SHOW(inputStatus, filterItems, listItems));
+    case "todo":
+      console.log(MESSAGE.SHOW(inputStatus, todoFilterItems, todoItems));
+      break;
+    case "doing":
+      console.log(MESSAGE.SHOW(inputStatus, doingFilterItems, doingItems));
+      break;
+    case "done":
+      console.log(MESSAGE.SHOW(inputStatus, doneFilterItems, doneItems));
+      break;
+    default:
+      console.log(ERROR.WRONG_COMMAND);
       break;
   }
+}
+
+function showStatusList(status) {
+  const filterItems = todos.filter((todo) => todo.status === status);
+  let listItems = "";
+
+  filterItems.forEach((item, idx) => {
+    listItems += MESSAGE.SHOW_LIST(item, idx);
+  });
+
+  return [filterItems, listItems];
 }
 
 /**
