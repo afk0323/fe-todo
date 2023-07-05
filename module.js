@@ -35,9 +35,10 @@ function addTodo(inputName, inputTag) {
   }
 
   // 3. 태그 형식이 아닐 때
+  inputTag = inputTag.replace(/'/g, '"');
+
   const isArray = (input) => {
-    const regex =
-      /^\s*\[(\s*('[^']*'|"([^"]*)")\s*,)*\s*('[^']*'|"([^"]*)")\s*\]\s*$/;
+    const regex = /^\s*\[(\s*"[^"]*"\s*(?:,\s*"[^"]*"\s*)*)?\]\s*$/;
     return regex.test(input);
   };
 
@@ -49,7 +50,7 @@ function addTodo(inputName, inputTag) {
 
   const newItem = {
     name: inputName,
-    tags: inputTag,
+    tags: JSON.parse(inputTag),
     status: "todo",
     id: idCount++,
   };
@@ -138,9 +139,8 @@ function showTodo(inputStatus) {
       const filterItems = todos.filter((todo) => todo.status === inputStatus);
       let listItems = "";
 
-      filterItems.forEach((_, idx) => {
-        if (idx !== 0) listItems += ", ";
-        listItems += MESSAGE.SHOW_LIST;
+      filterItems.forEach((item, idx) => {
+        listItems += MESSAGE.SHOW_LIST(item, idx);
       });
       console.log(MESSAGE.SHOW(inputStatus, filterItems, listItems));
       break;

@@ -34,8 +34,11 @@ const MESSAGE = {
   UPDATE: (updateName, inputState) =>
     `${updateName} ${inputState}으로 상태가 변경됐습니다.`,
   SHOW: (status, filterItems, listItems) =>
-    `${status}리스트 : 총${filterItems.length}건 : ${listItems}`,
-  SHOW_LIST: (item) => `'${item.name}, ${item.id}번'`,
+    `\n${status}리스트 : 총${filterItems.length}건 \n${listItems}`,
+  SHOW_LIST: (item, idx) =>
+    `${idx + 1}번 ) 이름 : ${item.name} | id : ${item.id} | tag : ${
+      item.tags
+    } \n`,
   NOW_STATE: (count) =>
     `현재상태 : todo: ${count.todo}개, doing: ${count.doing}개, done: ${count.done}개`,
 };
